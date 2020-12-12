@@ -1,17 +1,26 @@
 defmodule CoreTest do
   use ExUnit.Case
-  alias Clock.{Core, Blinker}
+  alias Clock.Core
   
-  defp clock do
+  defp clock(time \\ 0) do
     Enum.zip(0..5, 1..6) 
     |> Map.new 
-    |> Core.new(0)
+    |> Core.new(time)
   end
     
   defp assert_pin(clock, led, state) do
     status = Core.status(clock)
     assert status[led] == state
     clock
+  end
+  
+  test "clock ticks wrap" do
+    wrapped_time = 
+      clock(59) 
+      |> Core.tick 
+      |> Map.get(:time)
+    
+    assert wrapped_time == 0
   end
   
   test "sets LED states after ticks" do

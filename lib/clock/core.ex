@@ -9,7 +9,7 @@ defmodule Clock.Core do
 
   # reducer
   def tick(clock) do
-    %__MODULE__{clock| time: rem(clock.time + 1, 64)}
+    %__MODULE__{clock| time: rem(clock.time + 1, 60)}
   end
   
   # converter
