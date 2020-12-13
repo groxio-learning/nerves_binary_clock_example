@@ -2,10 +2,6 @@ defmodule Clock.Server do
   use GenServer
   alias Clock.{LEDAdapter, Core}
 
-  def start_link(initial_state \\ default_options()) do
-    GenServer.start_link(__MODULE__, initial_state, name: __MODULE__)
-  end
-
   def init(args) do
     pins = args[:pins]
     time = args[:time] || default_time()
@@ -34,13 +30,9 @@ defmodule Clock.Server do
   end
 
   defp open_gpio_pins(module, pins) do
-    IO.inspect module
-    IO.inspect pins
-    0..5
-    |> Enum.map(fn bit ->
-      {bit, LEDAdapter.open(pins[bit], module)}
-    end)
-    |> Map.new()
+    for bit <- 0..5, 
+    into: %{}, 
+    do: {bit, LEDAdapter.open(pins[bit], module)}
   end
 
   defp set_leds(clock) do
@@ -50,4 +42,10 @@ defmodule Clock.Server do
     )
     clock
   end
+  
+  def start_link(initial_state \\ default_options()) do
+    GenServer.start_link(__MODULE__, initial_state, name: __MODULE__)
+  end
+  
+  def tick, do: send(__MODULE__, :tick)
 end

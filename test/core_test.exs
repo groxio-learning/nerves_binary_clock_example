@@ -7,14 +7,8 @@ defmodule CoreTest do
     |> Map.new 
     |> Core.new(time)
   end
-    
-  defp assert_pin(clock, led, state) do
-    status = Core.status(clock)
-    assert status[led] == state
-    clock
-  end
   
-  test "clock ticks wrap" do
+  test "clock ticks wrap from 59 to 0" do
     wrapped_time = 
       clock(59) 
       |> Core.tick 
@@ -22,7 +16,13 @@ defmodule CoreTest do
     
     assert wrapped_time == 0
   end
-  
+    
+  defp assert_pin(clock, led, state) do
+    status = Core.status(clock)
+    assert status[led] == state
+    clock
+  end
+    
   test "sets LED states after ticks" do
     clock()
     |> assert_pin(1, false)
