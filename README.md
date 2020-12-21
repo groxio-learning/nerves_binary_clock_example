@@ -1,3 +1,4 @@
 # Groxio binary clock, core and adapters
 
-See grox.io/language/nerves/course
+Branch master: chapter 2
+Branch genserver: chapter 3
